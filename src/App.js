@@ -1,25 +1,41 @@
-import logo from './logo.svg';
+import React, { useState } from 'react';
 import './App.css';
+import UserSettings from './settings';
+import GuessGame from './guessNumForm';
+import { GamesWon, AvgCalc } from './stats';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const GuessApp = () => {
+    const [gameStarted, setGameStarted] = useState(false);
+    const [maxGuesses, setMaxGuesses] = useState(6);
+    const [numberRange, setNumberRange] = useState(250);
 
-export default App;
+    const handleStartGame = () => {
+        setGameStarted(true);
+        console.log('New Game Started!');
+    };
+
+    const handleSettingsSubmit = (maxGuesses, numberRange) => {
+        setMaxGuesses(maxGuesses);
+        setNumberRange(numberRange);
+    };
+
+    return (
+        <div className="app">
+            <h1>Number Guessing Game</h1>
+            {!gameStarted ? (
+                <div>
+                    <UserSettings onSettingsSubmit={handleSettingsSubmit} />
+                    <button onClick={handleStartGame}>Start New Game</button>
+                </div>
+            ) : (
+                <div>
+                    <GuessGame maxGuesses={maxGuesses} numberRange={numberRange} />
+                    <GamesWon />
+                    <AvgCalc />
+                </div>
+            )}
+        </div>
+    );
+};
+
+export default GuessApp;
